@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace case_study_library.data
+namespace case_study_library.Data
 {
     [Table("Table_BarrowHistory", Schema = "public")]
     public class BarrowHistory

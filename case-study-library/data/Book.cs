@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
-namespace case_study_library.data
+namespace case_study_library.Data
 {
     [Table("table_Book", Schema = "public")]
     public class Book
