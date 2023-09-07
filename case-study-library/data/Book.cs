@@ -16,6 +16,10 @@ namespace case_study_library.Data
         public string BookName { get; set; }
 
         [Required]
+        [Column("AboutBook")]
+        public string AboutBook { get; set; }
+
+        [Required]
         [Column("Author")]
         public string Author { get; set; }
 
@@ -25,6 +29,9 @@ namespace case_study_library.Data
 
         [Column("PublicationYear")]
         public DateTime? PublicationYear { get; set; }
+
+        [Column("IsAvaliable")]
+        public bool? IsAvaliable { get; set; }
 
         [Required]
         [Column("CreatedDate")]
