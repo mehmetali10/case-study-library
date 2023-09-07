@@ -1,30 +1,49 @@
 ﻿@{
 }
 
-@model List<Book> // Modelimizin tipini belirtiyoruz
+@model List<Book> 
 
-<h1>Kitap Listesi</h1>
+<div class="container">
+    <h1>Book List</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Kitap Adı</th>
-            <th>Yazar</th>
-            <th>Çıkış Yılı</th>
-            <th>Kapak</th>
-            <!-- Diğer sütun başlıkları eklenebilir -->
-        </tr>
-    </thead>
-    <tbody>
+    <!-- Arama Çubuğu -->
+    <div class="mb-3">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search Book">
+    </div>
+
+    <!-- Kitap Kartları -->
+    <div class="row">
         @foreach (var book in Model)
         {
-            <tr>
-                <td>@book.BookName</td>
-                <td>@book.Author</td>
-                <td>@book.PublicationYear</td>
-                <td><img width="200px" height="200px" src="@book.ImageLink"></img></td>
-                <!-- Diğer sütunlar eklenebilir -->
-            </tr>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                <div class="card" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
+                    <img src="@book.ImageLink" class="card-img-top" alt="Book Image">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate" style="max-width: 150px;">@book.BookName</h5>
+                        <p class="card-text text-truncate" style="max-width: 120px;">@book.Author</p>
+                        <p class="card-text text-truncate" style="max-width: 120px;">@book.Publisher</p>
+                        <p class="card-text text-truncate" style="max-width: 200px; color: #999;">@book.AboutBook</p>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("input", function () {
+                var searchText = $(this).val().toLowerCase();
+                $(".card").each(function () {
+                    var cardTitle = $(this).find(".card-title").text().toLowerCase();
+                    if (cardTitle.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+    </script>
+}
