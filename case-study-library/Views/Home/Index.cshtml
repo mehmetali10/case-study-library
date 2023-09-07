@@ -1,8 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@model List<Book> // Modelimizin tipini belirtiyoruz
+
+<h1>Kitap Listesi</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Kitap Adı</th>
+            <th>Yazar</th>
+            <th>Çıkış Yılı</th>
+            <th>Kapak</th>
+            <!-- Diğer sütun başlıkları eklenebilir -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.BookName</td>
+                <td>@book.Author</td>
+                <td>@book.PublicationYear</td>
+                <td><img width="200px" height="200px" src="@book.ImageLink"></img></td>
+                <!-- Diğer sütunlar eklenebilir -->
+            </tr>
+        }
+    </tbody>
+</table>

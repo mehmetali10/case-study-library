@@ -1,4 +1,5 @@
-﻿using case_study_library.Models;
+﻿using case_study_library.Data;
+using case_study_library.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +8,18 @@ namespace case_study_library.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly LibraryDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, LibraryDbContext dbContext )
         {
+            _dbContext = dbContext;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var list = _dbContext.Books.OrderBy(b => b.BookName).Where(b => b.IsDeleted == false && b.IsAvaliable == true).ToList();
+            return View(list);
         }
 
         public IActionResult Privacy()
