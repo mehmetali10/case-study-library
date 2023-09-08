@@ -28,7 +28,7 @@ namespace case_study_library.Data
         }
     }
 
-    public class LibraryDbContexttFactory : IDesignTimeDbContextFactory<LibraryDbContext>
+    public class LibraryDbContextFactory : IDesignTimeDbContextFactory<LibraryDbContext>
     {
         public LibraryDbContext CreateDbContext(string[] args)
         {
