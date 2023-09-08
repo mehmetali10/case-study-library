@@ -77,8 +77,11 @@ namespace case_study_library.Controllers
 
                 if (book == null)
                 {
+                    _logger.LogError("Book is null");
                     return View("Error");
                 }
+
+                _logger.LogInformation($"Get book called with id : '{id}'");
 
                 return View(book);
             }
