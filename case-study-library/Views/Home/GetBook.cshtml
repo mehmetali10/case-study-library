@@ -1,9 +1,28 @@
-﻿@model Book 
-
-<h2>Kitap Detayları</h2>
-<div>
-    <h4>Kitap Adı: @Model.BookName</h4>
-    <p>Yazar: @Model.Author</p>
-    <p>Yayınevi: @Model.Publisher</p>
-    <p>Hakkında: @Model.AboutBook</p>
+﻿<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center">Kitap Detayları</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <img src="@Model.ImageLink" class="img-fluid mb-4" alt="Kitap Resmi">
+                        </div>
+                        <div class="col-md-8">
+                            <h4 class="mb-3">Kitap Adı:</h4>
+                            <p>@Model.BookName</p>
+                            <h4 class="mb-3">Yazar:</h4>
+                            <p>@Model.Author</p>
+                            <h4 class="mb-3">Yayınevi:</h4>
+                            <p>@Model.Publisher</p>
+                            <h4 class="mb-3">Hakkında:</h4>
+                            <p>@Model.AboutBook</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

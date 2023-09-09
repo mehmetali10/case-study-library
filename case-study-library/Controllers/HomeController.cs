@@ -22,16 +22,35 @@ namespace case_study_library.Controllers
         {
             try
             {
-                var list = _dbContext.Books.OrderBy(b => b.BookName).Where(b => b.IsDeleted == false && b.IsAvaliable == true).ToList();
+                var books = _dbContext.Books
+                    .Where(b => b.IsDeleted == false)
+                    .ToList();
 
-                _logger.LogInformation("Retrieved the list of available books.");
+                foreach (var book in books)
+                {
+                    var barrowHistory = _dbContext.BarrowHistories
+                        .Where(h => h.IsDeleted == false)
+                        .OrderByDescending(h => h.BarrowEndDate)
+                        .FirstOrDefault(h => h.BookId == book.Id);
 
-                return View(list);
+                    if (barrowHistory != null)
+                    {
+                        if (barrowHistory.BarrowEndDate <= DateTime.Now)
+                        {
+                            book.IsAvaliable = true;
+                        }
+                    }
+                }
+
+                _dbContext.SaveChanges(); 
+
+                _logger.LogInformation("Updated the availability of books.");
+
+                return View(books);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error occurred while retrieving books: {ex.Message}");
-
+                _logger.LogError($"Error occurred while updating book availability: {ex.Message}");
                 return View("Error");
             }
         }
