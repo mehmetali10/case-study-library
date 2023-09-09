@@ -130,6 +130,7 @@
                         // Başarı durumunda modalı kapat ve başarı mesajını göster
                         $("#addBookModal").modal("hide");
                         alert(response.message);
+                        location.reload();
                     } else {
                         // Hata durumunda hata mesajını göster
                         alert(response.message);
