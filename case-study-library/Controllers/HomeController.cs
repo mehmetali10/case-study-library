@@ -87,20 +87,32 @@ namespace case_study_library.Controllers
                 return View("Error");
             }
         }
-
         public IActionResult GetBook(int id)
         {
             try
             {
-                var book = _dbContext.Books.FirstOrDefault(b => b.Id == id);
+                var book = _dbContext.Books.Where(b => b.IsDeleted == false).FirstOrDefault(b => b.Id == id);
 
                 if (book == null)
                 {
-                    _logger.LogError("Book is null");
+                    _logger.LogError("Kitap bulunamadı");
                     return View("Error");
                 }
 
-                _logger.LogInformation($"Get book called with id : '{id}'");
+                _logger.LogInformation($"ID ile kitap sorgulandı: '{id}'");
+
+                if (book.IsAvaliable == false)
+                {
+                    var barrowHistory = _dbContext.BarrowHistories
+                        .Where(b => b.IsDeleted == false)
+                        .OrderByDescending(h => h.BarrowEndDate)
+                        .FirstOrDefault(h => h.BookId == id);
+
+                    if (barrowHistory != null && barrowHistory.BarrowEndDate >= DateTime.Now)
+                    {
+                        ViewBag.BarrowHistory = barrowHistory;
+                    }
+                }
 
                 return View(book);
             }
@@ -110,7 +122,6 @@ namespace case_study_library.Controllers
                 return View("Error");
             }
         }
-
 
 
         public IActionResult Privacy()
