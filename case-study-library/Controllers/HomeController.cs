@@ -56,7 +56,9 @@ namespace case_study_library.Controllers
         }
 
 
-        public IActionResult CreateBook(CreateBookRequest _book)
+        [HttpPost]
+        public IActionResult CreateBook([FromBody] CreateBookRequest _book)
+
         {
             try
             {
@@ -66,7 +68,7 @@ namespace case_study_library.Controllers
                     Author = _book.Author,
                     AboutBook = _book.AboutBook,
                     ImageLink = _book.ImageLink,
-                    PublicationYear = _book.PublicationYear,
+                    PublicationYear = _book.PublicationYear.HasValue ? _book.PublicationYear.Value.ToUniversalTime() : (DateTime?)null,
                     Publisher = _book.Publisher,
                     CreatedDate = DateTime.Now,
                     IsDeleted = false,
@@ -74,19 +76,22 @@ namespace case_study_library.Controllers
                 };
 
                 _dbContext.Books.Add(newBook);
-
                 _dbContext.SaveChanges();
 
                 _logger.LogInformation($"New book '{newBook.BookName}' created.");
 
-                return RedirectToAction("Index");
+                // Kitap başarıyla oluşturulduğunda bir başarı mesajı döndürün.
+                return Json(new { success = true, message = "Kitap başarıyla oluşturuldu." });
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error creating book: {ex.Message}");
-                return View("Error");
+                // Hata durumunda bir hata mesajı döndürün.
+                return Json(new { success = false, message = "Kitap oluşturulurken bir hata oluştu." });
             }
         }
+
+
         public IActionResult GetBook(int id)
         {
             try

@@ -27,7 +27,7 @@ namespace case_study_library.Data
         [Column("Publisher")]
         public string Publisher { get; set; }
 
-        [Column("PublicationYear")]
+        [Column("PublicationYear", TypeName = "timestamp")]
         public DateTime? PublicationYear { get; set; }
 
         [Column("IsAvaliable")]

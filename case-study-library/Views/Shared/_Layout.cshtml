@@ -25,12 +25,64 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Add Book</a>
+                            <button class="nav-link text-dark" type="button" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                                Add Book
+                            </button>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBookModalLabel">Create Book</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="bookName" class="form-label">Name:</label>
+                                <input type="text" class="form-control" id="BookName" name="BookName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="author" class="form-label">Author:</label>
+                                <input type="text" class="form-control" id="Author" name="Author" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="publicationYear" class="form-label">Publication Year:</label>
+                                <input type="date" class="form-control" id="PublicationYear" name="PublicationYear" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="imageLink" class="form-label">Image Link:</label>
+                                <input type="text" class="form-control" id="ImageLink" name="ImageLink" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="publisher" class="form-label">Publisher:</label>
+                                <input type="text" class="form-control" id="Publisher" name="Publisher" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="aboutBook" class="form-label">About Book:</label>
+                                <textarea class="form-control" id="AboutBook" name="AboutBook" rows="3" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="createBookBtn">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
     </header>
     <div class="container">
@@ -47,6 +99,55 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+
+
+
+
+    <script>
+        // Create butonuna tıklanınca Ajax isteği gönder
+        $("#createBookBtn").click(function () {
+            // Formdaki verileri al
+            var formData = {
+                BookName: $("#BookName").val(),
+                Author: $("#Author").val(),
+                AboutBook: $("#AboutBook").val(),
+                Publisher: $("#Publisher").val(),
+                PublicationYear: $("#PublicationYear").val(),
+                ImageLink: $("#ImageLink").val(),
+                Publisher: $("#Publisher").val()
+            };
+
+            // Ajax isteği gönder
+            $.ajax({
+                type: "POST",
+                url: "/Home/CreateBook", // Controller yöntemi URL'si
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                success: function (response) {
+                    if (response.success) {
+                        // Başarı durumunda modalı kapat ve başarı mesajını göster
+                        $("#addBookModal").modal("hide");
+                        alert(response.message);
+                    } else {
+                        // Hata durumunda hata mesajını göster
+                        alert(response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                    // Hata durumunda hata mesajını göster
+                    alert("Kitap oluşturulurken bir hata oluştu.");
+                }
+            });
+        });
+    </script>
+
+
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

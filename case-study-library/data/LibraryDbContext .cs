@@ -13,6 +13,11 @@ namespace case_study_library.Data
         {
         }
 
+        static LibraryDbContext()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+        
         public DbSet<Book> Books { get; set; }
         public DbSet<BarrowHistory> BarrowHistories { get; set; }
 

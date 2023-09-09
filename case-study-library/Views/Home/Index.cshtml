@@ -1,7 +1,7 @@
 ﻿@{
 }
 
-@model List<Book> 
+@model List<Book>
 
 <div class="container">
     <h1>Book List</h1>
@@ -19,7 +19,8 @@
             <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
                 <div class="card" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
                     <a href="@Url.Action("GetBook", "Home", new { id = book.Id })" style="text-decoration: none; color: inherit;">
-                        <img src="@book.ImageLink" height="320" width="150" class="card-img-top" alt="Book Image">
+                        <img src="@book.ImageLink" height="320" width="150" class="card-img-top" alt="Book Image" style="padding: 16px;">
+
                         <div class="card-body">
                             @{
                                 string titleColor = (book.IsAvaliable == true) ? "black" : "red";
