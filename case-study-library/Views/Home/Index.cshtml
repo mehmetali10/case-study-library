@@ -13,29 +13,34 @@
 
     <!-- Kitap Kartları -->
     <div class="row">
-        @foreach (var book in Model)
-        {
-            <!-- Eğer isAvaliable false ise kitap başlığı kırmızı olsun -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                <div class="card" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
-                    <a href="@Url.Action("GetBook", "Home", new { id = book.Id })" style="text-decoration: none; color: inherit;">
-                        <img src="@book.ImageLink" height="320" width="150" class="card-img-top" alt="Book Image" style="padding: 16px;">
+        <div class="row">
+            @foreach (var book in Model)
+            {
+                <!-- Eğer isAvaliable false ise kitap başlığı kırmızı olsun -->
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                    <div class="card" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
+                        <a href="@Url.Action("GetBook", "Home", new { id = book.Id })" style="text-decoration: none; color: inherit;">
+                            <img src="@book.ImageLink" height="320" width="150" class="card-img-top" alt="Book Image" style="padding: 16px;">
 
-                        <div class="card-body">
-                            @{
-                                string titleColor = (book.IsAvaliable == true) ? "black" : "red";
-                            }
+                            <div class="card-body">
+                                @{
+                                    string titleColor = (book.IsAvaliable == true) ? "black" : "red";
+                                }
 
-                            <h6 class="card-title text-truncate" style="color: @titleColor;">@book.BookName</h6>
-                            <p class="card-text text-truncate" style="color: #999;">@book.Author</p>
-                            <p class="card-text text-truncate" style="color: #999;">@book.Publisher</p>
-                            <p class="card-text text-truncate" style="max-width: 200px; color: #999;">@book.AboutBook</p>
-                        </div>
-                    </a>
+                                <h6 class="card-title text-truncate" style="color: @titleColor;">@book.BookName</h6>
+                                <p class="card-text text-truncate" style="color: #999;">@book.Author</p>
+                                <p class="card-text text-truncate" style="color: #999;">@book.Publisher</p>
+                                @if(book.IsAvaliable == true) {
+                                    <button id="borrowButton" class="btn btn-primary">Ödünç Ver</button>
+                                }else {
+                                    <p class="card-text text-truncate" style="max-width: 200px; color: #999;">@book.AboutBook</p>
+
+                                }
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        }
-
+            }
 
     </div>
 </div>
@@ -55,5 +60,7 @@
                 });
             });
         });
+
     </script>
 }
+
