@@ -12,7 +12,7 @@ namespace case_study_library.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly LibraryDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger, LibraryDbContext dbContext )
+        public HomeController(ILogger<HomeController> logger, LibraryDbContext dbContext)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -42,7 +42,7 @@ namespace case_study_library.Controllers
                     }
                 }
 
-                _dbContext.SaveChanges(); 
+                _dbContext.SaveChanges();
 
                 _logger.LogInformation("Updated the availability of books.");
 
@@ -88,6 +88,48 @@ namespace case_study_library.Controllers
                 _logger.LogError($"Error creating book: {ex.Message}");
                 // Hata durumunda bir hata mesajı döndürün.
                 return Json(new { success = false, message = "Kitap oluşturulurken bir hata oluştu." });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateBarrow([FromBody] CreateBarrowRequest _barrow)
+
+        {
+            try
+            {
+                var newBarrow = new BarrowHistory
+                {
+                    BookId = _barrow.BookId,
+                    PersonName = _barrow.PersonName,
+                    PersonSurname = _barrow.PersonSurname,
+                    BarrowEndDate = (DateTime)(_barrow.BarrowEndDate.HasValue ? _barrow.BarrowEndDate.Value.ToUniversalTime() : (DateTime?)null),
+                    BarrowStartDate = DateTime.Now,
+                    IsDeleted = false,
+                };
+
+                _dbContext.BarrowHistories.Add(newBarrow);
+                var bookToUpdate = _dbContext.Books.FirstOrDefault(b => b.Id == _barrow.BookId);
+
+                // Check if the book exists
+                if (bookToUpdate != null)
+                {
+                    // Update the IsAvailable property to false
+                    bookToUpdate.IsAvaliable = false;
+
+                    // Save the changes to the database
+                    _dbContext.SaveChanges();
+                }
+
+                _logger.LogInformation($"New barrow '{newBarrow.Id}' created.");
+
+                // Kitap başarıyla oluşturulduğunda bir başarı mesajı döndürün.
+                return Json(new { success = true, message = "Kitap Barrow oluşturuldu." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error creating barrow: {ex.Message}");
+                // Hata durumunda bir hata mesajı döndürün.
+                return Json(new { success = false, message = "Kitap barrow oluşturulurken bir hata oluştu." });
             }
         }
 
