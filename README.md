@@ -40,17 +40,22 @@ This application meets the following requirements:
 
 ## Screenshots
 ### Home Page (Books that are currently unavailable are marked with a red title)
-![image](https://github.com/mehmetali10/case-study-library/assets/77547122/58699bbb-4249-4afa-b48f-c1882042e5bb)
+![image](https://github.com/mehmetali10/case-study-library/assets/77547122/b8720758-0e7a-46bf-8ade-0636fa381724)
+
 
 ### Add Book Modal
-![image](https://github.com/mehmetali10/case-study-library/assets/77547122/c123d89d-115c-47f9-b193-24eb241d740f)
+![image](https://github.com/mehmetali10/case-study-library/assets/77547122/47d7cfbc-ecb3-4334-9f55-cfb597f9653b)
+
 
 ### Give Barrow Modal
-![image](https://github.com/mehmetali10/case-study-library/assets/77547122/48b38305-f512-46ee-8b8f-32b6ccee699c)
+![image](https://github.com/mehmetali10/case-study-library/assets/77547122/ea224dfd-1368-4dd5-aa3a-35a0d6c426fd)
+
 
 ### Book Details
 
-![image](https://github.com/mehmetali10/case-study-library/assets/77547122/36ea672b-7cfd-4c36-91ca-6ed5d0bf3388)
+![image](https://github.com/mehmetali10/case-study-library/assets/77547122/5bb841dc-8449-48f9-9a44-49f1ca2e25f6)
 
-![image](https://github.com/mehmetali10/case-study-library/assets/77547122/e791ece2-93e0-4d41-887b-698ffbe29d9c)
+
+![image](https://github.com/mehmetali10/case-study-library/assets/77547122/4eb17234-161f-45b6-8dd6-83408df608e9)
+
 
