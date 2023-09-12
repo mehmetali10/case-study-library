@@ -27,7 +27,7 @@ This application meets the following requirements:
 
 1. Run the application.
 2. On the main page, you can view books in the library.
-3. You can lend a book by clicking the "Lend" button.
+3. You can barrow a book by clicking the "Barrow" button.
 4. You can add a new book using the "Add Book" link.
 
 ## Installation
