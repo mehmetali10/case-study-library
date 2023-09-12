@@ -19,7 +19,7 @@
             {
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
                     <div class="card" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
-                        <a href="@Url.Action("GetBook", "Home", new { id = book.Id })" style="text-decoration: none; color: inherit;">
+                        <a href="@Url.Action("GetBook", "Book", new { id = book.Id })" style="text-decoration: none; color: inherit;">
                             <img src="@book.ImageLink" height="320" width="150" class="card-img-top" alt="Book Image" style="padding: 16px;">
                         </a>
 
@@ -85,7 +85,7 @@
                                         // Ajax isteği gönder
                                         $.ajax({
                                             type: "POST",
-                                            url: "/Home/CreateBarrow", // Controller yöntemi URL'si
+                                            url: "/Book/CreateBarrow", // Controller yöntemi URL'si
                                             data: JSON.stringify(formData),
                                             contentType: "application/json",
                                             success: function (response) {

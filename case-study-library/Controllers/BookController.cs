@@ -3,16 +3,19 @@ using case_study_library.Dtos;
 using case_study_library.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace case_study_library.Controllers
 {
-    public class HomeController : Controller
+    public class BookController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<BookController> _logger;
         private readonly LibraryDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger, LibraryDbContext dbContext)
+        public BookController(ILogger<BookController> logger, LibraryDbContext dbContext)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -55,10 +58,8 @@ namespace case_study_library.Controllers
             }
         }
 
-
         [HttpPost]
         public IActionResult CreateBook([FromBody] CreateBookRequest _book)
-
         {
             try
             {
@@ -80,20 +81,17 @@ namespace case_study_library.Controllers
 
                 _logger.LogInformation($"New book '{newBook.BookName}' created.");
 
-                // Kitap başarıyla oluşturulduğunda bir başarı mesajı döndürün.
-                return Json(new { success = true, message = "Kitap başarıyla oluşturuldu." });
+                return Json(new { success = true, message = "Book created successfully." });
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error creating book: {ex.Message}");
-                // Hata durumunda bir hata mesajı döndürün.
-                return Json(new { success = false, message = "Kitap oluşturulurken bir hata oluştu." });
+                return Json(new { success = false, message = "An error occurred while creating the book." });
             }
         }
 
         [HttpPost]
         public IActionResult CreateBarrow([FromBody] CreateBarrowRequest _barrow)
-
         {
             try
             {
@@ -110,29 +108,22 @@ namespace case_study_library.Controllers
                 _dbContext.BarrowHistories.Add(newBarrow);
                 var bookToUpdate = _dbContext.Books.FirstOrDefault(b => b.Id == _barrow.BookId);
 
-                // Check if the book exists
                 if (bookToUpdate != null)
                 {
-                    // Update the IsAvailable property to false
                     bookToUpdate.IsAvaliable = false;
-
-                    // Save the changes to the database
                     _dbContext.SaveChanges();
                 }
 
                 _logger.LogInformation($"New barrow '{newBarrow.Id}' created.");
 
-                // Kitap başarıyla oluşturulduğunda bir başarı mesajı döndürün.
-                return Json(new { success = true, message = "Kitap Barrow oluşturuldu." });
+                return Json(new { success = true, message = "Barrow created successfully." });
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error creating barrow: {ex.Message}");
-                // Hata durumunda bir hata mesajı döndürün.
-                return Json(new { success = false, message = "Kitap barrow oluşturulurken bir hata oluştu." });
+                return Json(new { success = false, message = "An error occurred while creating the barrow." });
             }
         }
-
 
         public IActionResult GetBook(int id)
         {
@@ -142,11 +133,11 @@ namespace case_study_library.Controllers
 
                 if (book == null)
                 {
-                    _logger.LogError("Kitap bulunamadı");
+                    _logger.LogError("Book not found");
                     return View("Error");
                 }
 
-                _logger.LogInformation($"ID ile kitap sorgulandı: '{id}'");
+                _logger.LogInformation($"Book queried by ID: '{id}'");
 
                 if (book.IsAvaliable == false)
                 {
@@ -165,15 +156,9 @@ namespace case_study_library.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Hata oluştu: {ex.Message}");
+                _logger.LogError($"An error occurred: {ex.Message}");
                 return View("Error");
             }
-        }
-
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
