@@ -1,35 +1,40 @@
 ﻿@model Book
 
 <style>
-    /* Görünümün stilini özelleştirme */
 
+    /* Styling for the card element */
     .card {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
 
+    /* Styling for the card header */
     .card-header {
         background-color: #007bff;
     }
 
+        /* Styling for the heading inside the card header */
         .card-header h2 {
             font-size: 24px;
             padding: 10px;
             margin: 0;
         }
 
+    /* Styling for the card body */
     .card-body {
         padding: 20px;
     }
 
+    /* Styling for images within the card */
     .card img {
         max-width: 100%;
     }
 
+    /* Margin-bottom utility class */
     .mb-3 {
         margin-bottom: 15px;
     }
 
-    /* Ödünç Alan ve Bitiş Tarihi'nin stilini özelleştirme */
+    /* Styling for additional book info */
     .barrow-info {
         background-color: #f8f9fa;
         padding: 10px;
@@ -43,27 +48,27 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h2 class="text-center">Kitap Detayları</h2>
+                    <h2 class="text-center">Book Details</h2>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 text-center">
-                            <img src="@Model.ImageLink" class="img-fluid mb-4" alt="Kitap Resmi">
+                            <img src="@Model.ImageLink" class="img-fluid mb-4" alt="Book Image">
                         </div>
                         <div class="col-md-8">
-                            <h4 class="mb-3">Kitap Adı:</h4>
+                            <h4 class="mb-3">Book Name:</h4>
                             <p>@Model.BookName</p>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="mb-3">Yazar:</h4>
+                                    <h4 class="mb-3">Author:</h4>
                                     <p>@Model.Author</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4 class="mb-3">Yayınevi:</h4>
+                                    <h4 class="mb-3">Publisher:</h4>
                                     <p>@Model.Publisher</p>
                                 </div>
                             </div>
-                            <h4 class="mb-3">Hakkında:</h4>
+                            <h4 class="mb-3">About:</h4>
                             <p>@Model.AboutBook</p>
 
                             @if (ViewBag.BarrowHistory != null)
@@ -71,11 +76,11 @@
                                 <div class="mt-4 barrow-info">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h4 class="mb-3">Ödünç Alan:</h4>
+                                            <h4 class="mb-3">Borrower:</h4>
                                             <p>@ViewBag.BarrowHistory.PersonName @ViewBag.BarrowHistory.PersonSurname</p>
                                         </div>
                                         <div class="col-md-6">
-                                            <h4 class="mb-3">Bitiş Tarihi:</h4>
+                                            <h4 class="mb-3">End Date:</h4>
                                             <p>@((DateTime)ViewBag.BarrowHistory.BarrowEndDate)</p>
                                         </div>
                                     </div>

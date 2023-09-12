@@ -2,8 +2,6 @@
 using case_study_library.Dtos;
 using case_study_library.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -25,10 +23,12 @@ namespace case_study_library.Controllers
         {
             try
             {
+                // Retrieve available books from the database
                 var books = _dbContext.Books
                     .Where(b => b.IsDeleted == false)
                     .ToList();
 
+                // Update book availability based on borrowing history
                 foreach (var book in books)
                 {
                     var barrowHistory = _dbContext.BarrowHistories
@@ -45,8 +45,10 @@ namespace case_study_library.Controllers
                     }
                 }
 
+                // Save changes to the database
                 _dbContext.SaveChanges();
 
+                // Log the update operation
                 _logger.LogInformation("Updated the availability of books.");
 
                 return View(books);
@@ -63,6 +65,7 @@ namespace case_study_library.Controllers
         {
             try
             {
+                // Create a new book record
                 var newBook = new Book
                 {
                     BookName = _book.BookName,
@@ -76,9 +79,11 @@ namespace case_study_library.Controllers
                     IsAvaliable = true
                 };
 
+                // Add the new book to the database
                 _dbContext.Books.Add(newBook);
                 _dbContext.SaveChanges();
 
+                // Log the book creation
                 _logger.LogInformation($"New book '{newBook.BookName}' created.");
 
                 return Json(new { success = true, message = "Book created successfully." });
@@ -95,6 +100,7 @@ namespace case_study_library.Controllers
         {
             try
             {
+                // Create a new borrowing history record
                 var newBarrow = new BarrowHistory
                 {
                     BookId = _barrow.BookId,
@@ -105,7 +111,10 @@ namespace case_study_library.Controllers
                     IsDeleted = false,
                 };
 
+                // Add the new borrowing history to the database
                 _dbContext.BarrowHistories.Add(newBarrow);
+
+                // Update the availability of the book
                 var bookToUpdate = _dbContext.Books.FirstOrDefault(b => b.Id == _barrow.BookId);
 
                 if (bookToUpdate != null)
@@ -114,6 +123,7 @@ namespace case_study_library.Controllers
                     _dbContext.SaveChanges();
                 }
 
+                // Log the borrowing history creation
                 _logger.LogInformation($"New barrow '{newBarrow.Id}' created.");
 
                 return Json(new { success = true, message = "Barrow created successfully." });
@@ -129,6 +139,7 @@ namespace case_study_library.Controllers
         {
             try
             {
+                // Retrieve book information by ID
                 var book = _dbContext.Books.Where(b => b.IsDeleted == false).FirstOrDefault(b => b.Id == id);
 
                 if (book == null)
@@ -137,8 +148,10 @@ namespace case_study_library.Controllers
                     return View("Error");
                 }
 
+                // Log the book query
                 _logger.LogInformation($"Book queried by ID: '{id}'");
 
+                // Check if the book is currently borrowed
                 if (book.IsAvaliable == false)
                 {
                     var barrowHistory = _dbContext.BarrowHistories

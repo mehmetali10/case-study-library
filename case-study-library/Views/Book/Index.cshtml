@@ -6,15 +6,16 @@
 <div class="container">
     <h1>Book List</h1>
 
-    <!-- Arama Çubuğu -->
-    <div class="mb-3">
+    <!-- Simple Search Bar Without Button -->
+    <div class="input-group mb-3">
         <input type="text" class="form-control" id="searchInput" placeholder="Search Book">
     </div>
 
-    <!-- Kitap Kartları -->
+
+    <!-- Book Cards -->
     <div class="row">
         <div class="row">
-        
+
             @foreach (var book in Model)
             {
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
@@ -34,7 +35,7 @@
 
                             @if (book.IsAvaliable == true)
                             {
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBarrowModal-@book.Id">Ödünç Ver</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBarrowModal-@book.Id">Borrow</button>
                                 <input type="number" value="@book.Id" id="BookId-@book.Id" hidden>
 
                                 <!-- Modal -->
@@ -65,7 +66,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="button" class="btn btn-primary" id="createBarrowBtn-@book.Id" onclick="createBarrow(@book.Id)">Ödünç Ver</button>
+                                                <button type="button" class="btn btn-primary" id="createBarrowBtn-@book.Id" onclick="createBarrow(@book.Id)">Borrow</button>
                                             </div>
                                         </div>
                                     </div>
@@ -74,7 +75,7 @@
 
                                 <script>
                                     function createBarrow(bookId) {
-                                        // Formdaki verileri al
+                                        // Get data from the form
                                         var formData = {
                                             PersonName: $("#PersonName-" + bookId).val(),
                                             PersonSurname: $("#PersonSurname-" + bookId).val(),
@@ -82,27 +83,27 @@
                                             BookId: bookId,
                                         };
                                         console.log(formData)
-                                        // Ajax isteği gönder
+                                        // Send an Ajax request
                                         $.ajax({
                                             type: "POST",
-                                            url: "/Book/CreateBarrow", // Controller yöntemi URL'si
+                                            url: "/Book/CreateBarrow", // Controller method URL
                                             data: JSON.stringify(formData),
                                             contentType: "application/json",
                                             success: function (response) {
                                                 if (response.success) {
-                                                    // Başarı durumunda modalı kapat ve başarı mesajını göster
+                                                    // Close the modal and show a success message on success
                                                     $("#createBarrowModal-@book.Id").modal("hide");
                                                     alert(response.message);
                                                     location.reload();
                                                 } else {
-                                                    // Hata durumunda hata mesajını göster
+                                                    // Show an error message on failure
                                                     alert(response.message);
                                                 }
                                             },
                                             error: function (error) {
                                                 console.error(error);
-                                                // Hata durumunda hata mesajını göster
-                                                alert("Kitap ödünç verme sırasında bir hata oluştu.");
+                                                // Show an error message on failure
+                                                alert("There was an error while borrowing the book.");
                                             }
                                         });
                                     }
@@ -140,3 +141,4 @@
 
         </script>
     }
+    </div>

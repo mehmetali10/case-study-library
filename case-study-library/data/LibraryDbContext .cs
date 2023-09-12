@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace case_study_library.Data
 {

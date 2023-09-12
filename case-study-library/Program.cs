@@ -1,7 +1,5 @@
 using case_study_library.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this import
 
 var builder = WebApplication.CreateBuilder(args);
 
