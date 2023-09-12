@@ -14,9 +14,9 @@
     <!-- Kitap Kartları -->
     <div class="row">
         <div class="row">
+        
             @foreach (var book in Model)
             {
-                <!-- Eğer isAvaliable false ise kitap başlığı kırmızı olsun -->
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
                     <div class="card" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
                         <a href="@Url.Action("GetBook", "Home", new { id = book.Id })" style="text-decoration: none; color: inherit;">
@@ -34,60 +34,90 @@
 
                             @if (book.IsAvaliable == true)
                             {
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBarrowModal-@book.Id">Ödünç Ver</button>
+                                <input type="number" value="@book.Id" id="BookId-@book.Id" hidden>
 
-                                <button id="borrowButton" type="button" data-bs-toggle="modal" data-bs-target="#createBarrowModal">Ödünç Ver</button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="createBarrowModal-@book.Id" tabindex="-1" role="dialog" aria-labelledby="createBarrowModalLabel-@book.Id" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="createBarrowModalLabel-@book.Id">Create Barrow - @book.BookName</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="createBarrowForm-@book.Id">
+                                                    <div class="mb-3">
+                                                        <label for="PersonName-@book.Id" class="form-label">Person Name:</label>
+                                                        <input type="text" class="form-control" id="PersonName-@book.Id" name="PersonName" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="PersonSurname-@book.Id" class="form-label">Person Surname:</label>
+                                                        <input type="text" class="form-control" id="PersonSurname-@book.Id" name="PersonSurname" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="BarrowEndDate-@book.Id" class="form-label">Barow End Date:</label>
+                                                        <input type="date" class="form-control" id="BarrowEndDate-@book.Id" name="BarrowEndDate" required>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn btn-primary" id="createBarrowBtn-@book.Id" onclick="createBarrow(@book.Id)">Ödünç Ver</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <script>
+                                    function createBarrow(bookId) {
+                                        // Formdaki verileri al
+                                        var formData = {
+                                            PersonName: $("#PersonName-" + bookId).val(),
+                                            PersonSurname: $("#PersonSurname-" + bookId).val(),
+                                            BarrowEndDate: $("#BarrowEndDate-" + bookId).val(),
+                                            BookId: bookId,
+                                        };
+                                        console.log(formData)
+                                        // Ajax isteği gönder
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Home/CreateBarrow", // Controller yöntemi URL'si
+                                            data: JSON.stringify(formData),
+                                            contentType: "application/json",
+                                            success: function (response) {
+                                                if (response.success) {
+                                                    // Başarı durumunda modalı kapat ve başarı mesajını göster
+                                                    $("#createBarrowModal-@book.Id").modal("hide");
+                                                    alert(response.message);
+                                                    location.reload();
+                                                } else {
+                                                    // Hata durumunda hata mesajını göster
+                                                    alert(response.message);
+                                                }
+                                            },
+                                            error: function (error) {
+                                                console.error(error);
+                                                // Hata durumunda hata mesajını göster
+                                                alert("Kitap ödünç verme sırasında bir hata oluştu.");
+                                            }
+                                        });
+                                    }
+                                </script>
 
                             }
                             else
                             {
                                 <p class="card-text text-truncate" style="max-width: 200px; color: #999;">@book.AboutBook</p>
-
                             }
                         </div>
                     </div>
                 </div>
-
-
-
-                <!-- Modal -->
-                <div class="modal fade" id="createBarrowModal" tabindex="-1" role="dialog" aria-labelledby="createBarrowModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createBarrowModalLabel">Create Barrow - @book.BookName </h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="personName" class="form-label">Person Name:</label>
-                                        <input type="text" class="form-control" id="PersonName" name="PersonName" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="personSurname" class="form-label">Person Surname:</label>
-                                        <input type="text" class="form-control" id="PersonSurname" name="PersonSurname" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="barrowEndDate" class="form-label">Barow End Date:</label>
-                                        <input type="date" class="form-control" id="BarrowEndDate" name="BarrowEndDate" required>
-                                    </div>
-                                    <input type="number" value="@book.Id" id="BookId" hidden>
-
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="createBarrowBtn">Create</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
             }
+
 
         </div>
     </div>
@@ -107,42 +137,6 @@
                     });
                 });
             });
-
-            // Create butonuna tıklanınca Ajax isteği gönder
-            $("#createBarrowBtn").click(function () {
-                // Formdaki verileri al
-                var formData = {
-                    PersonName: $("#PersonName").val(),
-                    PersonSurname: $("#PersonSurname").val(),
-                    BarrowEndDate: $("#BarrowEndDate").val(),
-                    BookId : $("#BookId").val(),
-                };
-
-                // Ajax isteği gönder
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/CreateBarrow", // Controller yöntemi URL'si
-                    data: JSON.stringify(formData),
-                    contentType: "application/json",
-                    success: function (response) {
-                        if (response.success) {
-                            // Başarı durumunda modalı kapat ve başarı mesajını göster
-                            $("#addBookModal").modal("hide");
-                            alert(response.message);
-                            location.reload();
-                        } else {
-                            // Hata durumunda hata mesajını göster
-                            alert(response.message);
-                        }
-                    },
-                    error: function (error) {
-                        console.error(error);
-                        // Hata durumunda hata mesajını göster
-                        alert("Kitap oluşturulurken bir hata oluştu.");
-                    }
-                });
-            });
-
 
         </script>
     }
